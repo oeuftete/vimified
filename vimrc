@@ -98,7 +98,7 @@ if count(g:vimified_packages, 'general')
     Bundle 'ctrlpvim/ctrlp.vim'
     let g:ctrlp_working_path_mode = ''
 
-    Bundle 'vim-scripts/scratch.vim'
+    Bundle 'mtth/scratch.vim'
 
     Bundle 'troydm/easybuffer.vim'
     nmap <leader>be :EasyBufferToggle<cr>
