@@ -103,7 +103,7 @@ if count(g:vimified_packages, 'general')
     Bundle 'troydm/easybuffer.vim'
     nmap <leader>be :EasyBufferToggle<cr>
 
-    Bundle 'terryma/vim-multiple-cursors'
+    Bundle 'mg979/vim-visual-multi'
 endif
 " }}}
 
