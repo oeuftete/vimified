@@ -1,19 +1,10 @@
-" vimrc
-" Author: Zaiste! <oh@zaiste.net>
-" Source: https://github.com/zaiste/vimified
-"
-" Have fun!
-"
-"
+scriptencoding utf-8
+
 set nocompatible
 filetype on
 filetype off
 
 let s:dotvim = fnamemodify(globpath(&rtp, 'vimified.dir'), ':p:h')
-
-" Utils {{{
-exec ':so '.s:dotvim.'/functions/util.vim'
-" }}}
 
 " Load external configuration before anything else {{{
 let s:beforerc = expand(s:dotvim . '/before.vimrc')
@@ -22,8 +13,8 @@ if filereadable(s:beforerc)
 endif
 " }}}
 
-let mapleader = ","
-let maplocalleader = "\\"
+let g:mapleader = ","
+let g:maplocalleader = "\\"
 
 " Local vimrc configuration {{{
 let s:localrc = expand(s:dotvim . '/local.vimrc')
@@ -60,12 +51,6 @@ endif
 " _. General {{{
 if count(g:vimified_packages, 'general')
     Bundle 'editorconfig/editorconfig-vim'
-
-    Bundle 'rking/ag.vim'
-    nnoremap <leader>a :Ag -i<space>
-
-    Bundle 'matthias-guenther/hammer.vim'
-    nmap <leader>p :Hammer<cr>
 
     Bundle 'junegunn/vim-easy-align'
     Bundle 'tpope/vim-endwise'
@@ -109,10 +94,6 @@ endif
 
 " _. Fancy {{{
 if count(g:vimified_packages, 'fancy')
-    "call g:Check_defined('g:airline_left_sep', '')
-    "call g:Check_defined('g:airline_right_sep', '')
-    "call g:Check_defined('g:airline_branch_prefix', '')
-
     Bundle 'vim-airline/vim-airline'
     Bundle 'vim-airline/vim-airline-themes'
 endif
@@ -130,19 +111,6 @@ if count(g:vimified_packages, 'indent')
 endif
 " }}}
 
-" _. OS {{{
-if count(g:vimified_packages, 'os')
-    Bundle 'zaiste/tmux.vim'
-    Bundle 'benmills/vimux'
-    map <Leader>rp :VimuxPromptCommand<CR>
-    map <Leader>rl :VimuxRunLastCommand<CR>
-
-    map <LocalLeader>d :call VimuxRunCommand(@v, 0)<CR>
-    au! BufNewFile,BufRead /tmp/bash-fc* setfiletype sh
-
-endif
-" }}}
-
 " _. Coding {{{
 
 if count(g:vimified_packages, 'coding')
@@ -156,9 +124,6 @@ if count(g:vimified_packages, 'coding')
     Bundle 'scrooloose/nerdcommenter'
     nmap <leader># :call NERDComment(0, "invert")<cr>
     vmap <leader># :call NERDComment(0, "invert")<cr>
-
-    " - Bundle 'msanders/snipmate.vim'
-    Bundle 'sjl/splice.vim'
 
     Bundle 'tpope/vim-fugitive'
     nmap <leader>gs :Gstatus<CR>
@@ -182,6 +147,7 @@ if count(g:vimified_packages, 'coding')
     autocmd FileType gitcommit set tw=68 spell
     autocmd FileType gitcommit setlocal foldmethod=manual
 
+    " TODO: use with Dash?
     " Check API docs for current word in Zeal: http://zealdocs.org/
     nnoremap <leader>d :!zeal --query "<cword>"&<CR><CR>
 endif
@@ -350,22 +316,12 @@ match ErrorMsg '^\(<\|=\|>\)\{7\}\([^=].\+\)\?$'
 
 " Mappings {{{
 
-" You want to be part of the gurus? Time to get in serious stuff and stop using
-" arrow keys.
-noremap <left> <nop>
-noremap <up> <nop>
-noremap <down> <nop>
-noremap <right> <nop>
-
 " Yank from current cursor position to end of line
 map Y y$
 " Yank content in OS's clipboard. `o` stands for "OS's Clipoard".
 vnoremap <leader>yo "*y
 " Paste content from OS's clipboard
 nnoremap <leader>po "*p
-
-" clear highlight after search
-noremap <silent><Leader>/ :nohls<CR>
 
 " better ESC
 inoremap <C-k> <Esc>
@@ -396,7 +352,6 @@ nmap <leader>wq :w!<cr>:Bclose<cr>
 
 " . abbrevs {{{
 "
-iabbrev z@ oh@zaiste.net
 
 " . }}}
 
@@ -450,9 +405,6 @@ endif
 set numberwidth=3
 set winwidth=83
 set ruler
-if executable('zsh')
-  set shell=zsh\ -l
-endif
 set showcmd
 
 set exrc
@@ -554,6 +506,7 @@ nnoremap <silent> <leader>? :execute 'vimgrep /'.@/.'/g %'<CR>:copen<CR>
 
 " Highlight word {{{
 
+"  TODO: what uses these groups?
 nnoremap <silent> <leader>hh :execute 'match InterestingWord1 /\<<c-r><c-w>\>/'<cr>
 nnoremap <silent> <leader>h1 :execute 'match InterestingWord1 /\<<c-r><c-w>\>/'<cr>
 nnoremap <silent> <leader>h2 :execute '2match InterestingWord2 /\<<c-r><c-w>\>/'<cr>
@@ -661,7 +614,6 @@ exec ':so '.s:dotvim.'/functions/buffer_handling.vim'
 " }}}
 
 " _. Tab {{{
-exec ':so '.s:dotvim.'/functions/insert_tab_wrapper.vim'
 " }}}
 
 " _. Text Folding {{{
