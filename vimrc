@@ -68,7 +68,6 @@ if count(g:vimified_packages, 'general')
     " Keep NERDTree window fixed between multiple toggles
     set winfixwidth
 
-
     Bundle 'kana/vim-textobj-user'
     Bundle 'vim-scripts/YankRing.vim'
     let g:yankring_replace_n_pkey = '<leader>['
@@ -106,7 +105,6 @@ if count(g:vimified_packages, 'indent')
   let g:indentLine_color_term = 111
   let g:indentLine_color_gui = '#DADADA'
   let g:indentLine_char = 'c'
-  "let g:indentLine_char = '∙▹¦'
   let g:indentLine_char = '∙'
 endif
 " }}}
@@ -115,7 +113,7 @@ endif
 
 if count(g:vimified_packages, 'coding')
     Bundle 'majutsushi/tagbar'
-    nmap <leader>t :TagbarToggle<CR>
+    nmap <leader>tb :TagbarToggle<CR>
 
     Bundle 'gregsexton/gitv'
 
@@ -126,14 +124,16 @@ if count(g:vimified_packages, 'coding')
     vmap <leader># :call NERDComment(0, "invert")<cr>
 
     Bundle 'tpope/vim-fugitive'
-    nmap <leader>gs :Gstatus<CR>
-    nmap <leader>gc :Gcommit -v<CR>
-    nmap <leader>gac :Gcommit --amen -v<CR>
+    nmap <leader>gs :Git<CR>
+    nmap <leader>gc :Git commit -v<CR>
+    nmap <leader>gac :Git commit --amen -v<CR>
     nmap <leader>g :Ggrep
     " ,f for global git search for word under the cursor (with highlight)
     nmap <leader>f :let @/="\\<<C-R><C-W>\\>"<CR>:set hls<CR>:silent Ggrep -w "<C-R><C-W>"<CR>:ccl<CR>:cw<CR><CR>
     " same in visual mode
-    :vmap <leader>f y:let @/=escape(@", '\\[]$^*.')<CR>:set hls<CR>:silent Ggrep -F "<C-R>=escape(@", '\\"#')<CR>"<CR>:ccl<CR>:cw<CR><CR>
+    vmap <leader>f y:let @/=escape(@", '\\[]$^*.')<CR>:set hls<CR>:silent Ggrep -F "<C-R>=escape(@", '\\"#')<CR>"<CR>:ccl<CR>:cw<CR><CR>
+    autocmd FileType gitcommit set tw=68 spell
+    autocmd FileType gitcommit setlocal foldmethod=manual
 
     Bundle 'oeuftete/syntastic'
     let g:syntastic_enable_signs=1
@@ -142,14 +142,6 @@ if count(g:vimified_packages, 'coding')
 
     " --
 
-    Bundle 'vim-scripts/Reindent'
-
-    autocmd FileType gitcommit set tw=68 spell
-    autocmd FileType gitcommit setlocal foldmethod=manual
-
-    " TODO: use with Dash?
-    " Check API docs for current word in Zeal: http://zealdocs.org/
-    nnoremap <leader>d :!zeal --query "<cword>"&<CR><CR>
 endif
 " }}}
 
@@ -157,10 +149,7 @@ endif
 
 " _. Python {{{
 if count(g:vimified_packages, 'python')
-    Bundle 'klen/python-mode'
-    Bundle 'python.vim'
-    Bundle 'python_match.vim'
-    Bundle 'pythoncomplete'
+    Bundle 'python-mode/python-mode'
     Bundle 'jmcantrell/vim-virtualenv'
 endif
 " }}}
@@ -197,7 +186,6 @@ endif
 
 " _. HTML {{{
 if count(g:vimified_packages, 'html')
-    Bundle 'tpope/vim-haml'
     Bundle 'juvenn/mustache.vim'
     Bundle 'tpope/vim-markdown'
     Bundle 'digitaltoad/vim-jade'
@@ -214,8 +202,8 @@ endif
 
 " _. CSS {{{
 if count(g:vimified_packages, 'css')
-    Bundle 'wavded/vim-stylus'
-    Bundle 'lunaru/vim-less'
+    Bundle 'iloginow/vim-stylus'
+    Bundle 'groenewege/vim-less'
     nnoremap ,m :w <BAR> !lessc % > %:t:r.css<CR><space>
 endif
 " }}}
@@ -429,8 +417,6 @@ endif
 set cpo+=J
 " }}}
 
-set visualbell
-
 set wildignore=.svn,CVS,.git,.hg,*.o,*.a,*.class,*.mo,*.la,*.so,*.obj,*.swp,*.jpg,*.png,*.xpm,*.gif,.DS_Store,*.aux,*.out,*.toc,tmp,*.scssc
 set wildmenu
 
@@ -473,6 +459,12 @@ augroup END
 " http://vim.wikia.com/wiki/Remove_unwanted_spaces#Display_or_remove_unwanted_whitespace_with_a_script.
 autocmd BufWritePre * :%s/\s\+$//e
 
+"  Add a handy command to turn off whitespace cleaning.  Useful when working
+"  with other people's code where we don't want to introduce whitespace diffs.
+"
+"  mnemonic: nice-nice
+nnoremap <silent> <LocalLeader>nn :au! BufWritePre *<CR>
+
 " }}}
 
 " . searching {{{
@@ -503,16 +495,6 @@ nnoremap g, g,zz
 
 " Open a Quickfix window for the last search.
 nnoremap <silent> <leader>? :execute 'vimgrep /'.@/.'/g %'<CR>:copen<CR>
-
-" Highlight word {{{
-
-"  TODO: what uses these groups?
-nnoremap <silent> <leader>hh :execute 'match InterestingWord1 /\<<c-r><c-w>\>/'<cr>
-nnoremap <silent> <leader>h1 :execute 'match InterestingWord1 /\<<c-r><c-w>\>/'<cr>
-nnoremap <silent> <leader>h2 :execute '2match InterestingWord2 /\<<c-r><c-w>\>/'<cr>
-nnoremap <silent> <leader>h3 :execute '3match InterestingWord3 /\<<c-r><c-w>\>/'<cr>
-
-" }}}
 
 " }}}
 
@@ -572,12 +554,6 @@ nnoremap <leader>z zMzvzz
 
 " Quick editing {{{
 
-nnoremap <leader>ev <C-w>s<C-w>j:e $MYVIMRC<cr>
-exec 'nnoremap <leader>es <C-w>s<C-w>j:e '.s:dotvim.'/snippets/<cr>'
-nnoremap <leader>eg <C-w>s<C-w>j:e ~/.gitconfig<cr>
-nnoremap <leader>ez <C-w>s<C-w>j:e ~/.zshrc<cr>
-nnoremap <leader>et <C-w>s<C-w>j:e ~/.tmux.conf<cr>
-
 " --------------------
 
 set ofu=syntaxcomplete#Complete
@@ -605,10 +581,6 @@ augroup END
 
 " EXTENSIONS {{{
 
-" _. Scratch {{{
-exec ':so '.s:dotvim.'/functions/scratch_toggle.vim'
-" }}}
-
 " _. Buffer Handling {{{
 exec ':so '.s:dotvim.'/functions/buffer_handling.vim'
 " }}}
@@ -620,15 +592,9 @@ exec ':so '.s:dotvim.'/functions/buffer_handling.vim'
 exec ':so '.s:dotvim.'/functions/my_fold_text.vim'
 " }}}
 
-" _. Gist {{{
-" Send visual selection to gist.github.com as a private, filetyped Gist
-" Requires the gist command line too (brew install gist)
-vnoremap <leader>G :w !gist -p -t %:e \| pbcopy<cr>
 " }}}
 
-" }}}
-
-" Load addidional configuration (ie to overwrite shorcuts) {{{
+" Load additional configuration (ie to overwrite shorcuts) {{{
 let s:afterrc = expand(s:dotvim . '/after.vimrc')
 if filereadable(s:afterrc)
     exec ':so ' . s:afterrc
