@@ -79,8 +79,6 @@ if count(g:vimified_packages, 'general')
     let g:indentobject_meaningful_indentation = ["haml", "sass", "python", "yaml", "markdown"]
 
     Bundle 'Spaceghost/vim-matchit'
-    Bundle 'ctrlpvim/ctrlp.vim'
-    let g:ctrlp_working_path_mode = ''
 
     Bundle 'mtth/scratch.vim'
 
